@@ -13,11 +13,11 @@ public class Benchmark {
 	 */
 	public static void main(String[] args) {
 		
-		LoadLibraries();
+		/*LoadLibraries();
 		
 		jblasTest();
 		
-		nagcTest();
+		nagcTest();*/
 	}
 
 	public static void jblasTest() {
@@ -53,8 +53,7 @@ public class Benchmark {
 	}
 	
 	public static void LoadLibraries() {
-		System.load("C:\\Users\\Mitya\\Documents\\Egyetem\\MII\\ÖnlabII\\BLASBenchmark\\BlasCpp\\x64\\Debug\\BlasCpp.dll");
-		//"..\\..\\..\\BlasCpp\\x64\\Debug\\BlasCpp.dll"
+		
 	}
 
 }

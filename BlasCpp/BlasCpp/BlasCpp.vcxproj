@@ -79,6 +79,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>C:\Program Files %28x86%29\Java\jdk1.7.0_40\include\win32;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);C:\Program Files %28x86%29\Java\jdk1.7.0_40\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Program Files %28x86%29\Java\jdk1.7.0_40\include\win32;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);C:\Program Files %28x86%29\Java\jdk1.7.0_40\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -88,6 +91,9 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>C:\swigwin-2.0.11\swig.exe -java -c++ -package nativeInterface -outdir "c:\Users\Mitya\Documents\Egyetem\MII\ÖnlabII\BLASBenchmark\BLASJava\src\nativeInterface" "c:\Users\Mitya\Documents\Egyetem\MII\ÖnlabII\BLASBenchmark\BlasCpp\BlasCpp\BLASCpp.i"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
