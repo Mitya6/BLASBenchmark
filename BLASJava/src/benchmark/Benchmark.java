@@ -1,59 +1,102 @@
 package benchmark;
 
-import org.jblas.DoubleMatrix;
-import org.jblas.NativeBlas;
+import java.util.ArrayList;
 
 import blas.BLAS;
+import blas.JBlasBLAS;
+import blas.MatrixOrder;
 import blas.NagCBLAS;
+import blas.RealMatrix;
+import blas.Result;
 
 public class Benchmark {
 
-	/**
-	 * @param args
-	 */
+	private static ArrayList<BLAS> blasList;
+
 	public static void main(String[] args) {
+
+		blasList = new ArrayList<BLAS>();
+		blasList.add(new JBlasBLAS());
+		//blasList.add(new NagCBLAS());
+
+		// daxpyRandomTest(5, 1);
+		// daxpyRandomTest(5000, 100000);
+
+		//covarianceRandomTest(5, 3, 1);
 		
-		/*LoadLibraries();
+		ArrayList<double[]> dataSet = CsvReader.readData();
 		
-		jblasTest();
+		RealMatrix priceMatrix = new RealMatrix(220, 33, dataSet.get(0), MatrixOrder.RowMajor);
+		priceMatrix.setOrder(MatrixOrder.ColMajor);		
 		
-		nagcTest();*/
+		RealMatrix covMatrix = new RealMatrix(33, 33, dataSet.get(1), MatrixOrder.RowMajor);
+		covMatrix.setOrder(MatrixOrder.ColMajor);
+		
+		covarianceTest(priceMatrix.rows(), priceMatrix.columns(), priceMatrix, 1);
 	}
 
-	public static void jblasTest() {
-		int n = 5;
-		double alpha = 2;
-
-		DoubleMatrix x = new DoubleMatrix(n, 1, 1, 2, 3, 4, 5);
-		DoubleMatrix y = new DoubleMatrix(n, 1, 1, 2, 3, 4, 5);
-
-		x.print();
-		y.print();
-
-		NativeBlas.daxpy(n, alpha, x.data, 0, 1, y.data, 0, 1);
-
-		y.print();
-
-	}
-
-	public static void nagcTest() {
-		BLAS b = new NagCBLAS();
-		
-		double[] y = new double[6];
-		
-		for (int i = 0; i < y.length; i++) {
-			System.out.println(y[i]);
-		}
-		
-		b.daxpy(6, 1, new double[6], 1, y, 1);
-				
-		for (int i = 0; i < y.length; i++) {
-			System.out.println(y[i]);
-		}
-	}
 	
-	public static void LoadLibraries() {
+
+	private static void covarianceRandomTest(int m, int k, int times) {
+
+		// init random matrix
+		RealMatrix A = RealMatrix.createRandomDouble01(m, k,
+				MatrixOrder.ColMajor);
+
+		covarianceTest(m, k, A, times);
+	}
+
+	private static RealMatrix covarianceTest(int k, int n, RealMatrix A, int times) {
+		RealMatrix retval = null;
 		
+		for (BLAS b : blasList) {
+
+			RealMatrix result = new RealMatrix(n, n, MatrixOrder.ColMajor);
+
+			try {
+				b.covMtxPrimitive(MatrixOrder.ColMajor, k, n, A.data, k, k,
+						result.data, n, times);
+			} finally {
+				System.out.println("\n\n========== cov Random (x" + times
+						+ ") ==========\n");
+				//System.out.println("A:\n" + A + "\n");
+				System.out.println("result:\n" + result + "\n");
+			}
+			retval = result;
+		}
+		
+		return retval;
+	}
+
+	private static ArrayList<Result> daxpyRandomTest(int m, int times) {
+		ArrayList<Result> results = new ArrayList<Result>();
+
+		// init daxpy
+		RealMatrix x1 = RealMatrix.createRandomDouble01(m, 1,
+				MatrixOrder.ColMajor);
+		RealMatrix y1 = RealMatrix.createRandomDouble01(m, 1,
+				MatrixOrder.ColMajor);
+
+		for (BLAS b : blasList) {
+
+			RealMatrix y1LocalCopy = y1.copy();
+
+			try {
+				b.daxpy(x1.rows(), 2, x1.data, 1, y1LocalCopy.data, 1, times);
+			} finally {
+				System.out.println("\n\n========== DAXPY (x" + times
+						+ ") ==========\n");
+				System.out.println("x1:\n" + x1 + "\n");
+				System.out.println("y1 (original):\n" + y1 + "\n");
+				System.out.println("y1:\n" + y1LocalCopy + "\n");
+			}
+		}
+
+		return results;
+	}
+
+	static {
+		System.load("C:\\Users\\Mitya\\Documents\\Egyetem\\MII\\OnlabII\\BLASBenchmark\\BlasCpp\\Debug\\BlasCpp.dll");
 	}
 
 }

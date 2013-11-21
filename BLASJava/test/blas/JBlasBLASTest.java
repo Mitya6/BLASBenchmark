@@ -1,15 +1,7 @@
 package blas;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
-public class JBlasBLASTest {
+/*public class JBlasBLASTest {
 
 	// daxpy data
 	JavaMatrix x1 = null;
@@ -25,11 +17,11 @@ public class JBlasBLASTest {
 	// JavaMatrix x1 = JavaMatrix.createRandomInt10(2, 1);
 	// JavaMatrix y1 = JavaMatrix.createRandomInt10(2, 1);
 
-	/*
+	
 	 * JavaMatrix A = JavaMatrix.createRandomDouble01(3, 2); JavaMatrix x2 =
 	 * JavaMatrix.createRandomDouble01(2, 1); JavaMatrix y2 =
 	 * JavaMatrix.createRandomDouble01(2, 1);
-	 */
+	 
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -100,4 +92,4 @@ public class JBlasBLASTest {
 		fail("Not yet implemented");
 	}
 
-}
+}*/

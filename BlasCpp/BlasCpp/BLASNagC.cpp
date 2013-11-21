@@ -1,6 +1,9 @@
 #include "BLASNagC.h"
+#include <chrono>
+#include <thread>
 
 using namespace BLAS;
+using namespace std;
 
 //void BLASNagC::daxpy(int n, double alpha, double x[], int incx,
 //					 double y[], int incy)
@@ -11,10 +14,12 @@ using namespace BLAS;
 void BLASNagC::daxpby(int n, double alpha, double x[], int incx,
 					  double beta, double y[], int incy)
 {
+	this_thread::sleep_for(chrono::milliseconds(6500));
+
 	// return test data
 	for (int i = 0; i < n; i++)
 	{
-		y[i] = -1.0;
+		y[i] = -2.0;
 	}
 }
 

@@ -1,13 +1,10 @@
 package blas;
 
-import nativeInterface.BLASCppModule;
 
-import org.junit.Test;
-
-public class NagCBLASTest {
+/*public class NagCBLASTest {
 
 	static {
-		System.load("C:\\Users\\Mitya\\Documents\\Egyetem\\MII\\ÖnlabII\\BLASBenchmark\\BlasCpp\\Debug\\BlasCpp.dll");
+		System.load("C:\\Users\\Mitya\\Documents\\Egyetem\\MII\\OnlabII\\BLASBenchmark\\BlasCpp\\Debug\\BlasCpp.dll");
 	}
 
 	private SwigMatrix swgmtx = null;
@@ -30,4 +27,4 @@ public class NagCBLASTest {
 		}
 	}
 
-}
+}*/
