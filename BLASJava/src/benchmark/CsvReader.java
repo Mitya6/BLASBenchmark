@@ -2,22 +2,16 @@ package benchmark;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CsvReader {
-
-	public static ArrayList<double[]> readData() {
-
-		ArrayList<double[]> dataSet = new ArrayList<double[]>();
-		
-		// Read raw data
-		dataSet.add(readData("..\\..\\devizaarfolyamok_2013.csv", 220, 33));
-
-		// Read covariance data
-		dataSet.add(readData("..\\..\\devizaarfolyamok_cov.csv", 33, 33));
-
-		return dataSet;
+	
+	public static double[] loadPriceData() {
+		return readData("..\\..\\devizaarfolyamok_2013.csv", 220, 33);
+	}
+	
+	public static double[] loadCovarianceData() {
+		return readData("..\\..\\devizaarfolyamok_cov.csv", 33, 33);
 	}
 
 	private static double[] readData(String filename, int rows, int columns) {

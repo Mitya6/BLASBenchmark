@@ -3,11 +3,10 @@ package benchmark;
 import java.util.ArrayList;
 
 import blas.BLAS;
+import blas.IntelMKLBLAS;
 import blas.JBlasBLAS;
-import blas.MatrixOrder;
 import blas.NagCBLAS;
-import blas.RealMatrix;
-import blas.Result;
+import blas.NagJBLAS;
 
 public class Benchmark {
 
@@ -17,86 +16,40 @@ public class Benchmark {
 
 		blasList = new ArrayList<BLAS>();
 		blasList.add(new JBlasBLAS());
-		//blasList.add(new NagCBLAS());
+		blasList.add(new IntelMKLBLAS());
+		blasList.add(new NagCBLAS());
+		blasList.add(new NagJBLAS());
 
-		// daxpyRandomTest(5, 1);
-		// daxpyRandomTest(5000, 100000);
-
-		//covarianceRandomTest(5, 3, 1);
 		
-		ArrayList<double[]> dataSet = CsvReader.readData();
+
+		//ComplexTest.correctnessTests(blasList, true);
 		
-		RealMatrix priceMatrix = new RealMatrix(220, 33, dataSet.get(0), MatrixOrder.RowMajor);
-		priceMatrix.setOrder(MatrixOrder.ColMajor);		
 		
-		RealMatrix covMatrix = new RealMatrix(33, 33, dataSet.get(1), MatrixOrder.RowMajor);
-		covMatrix.setOrder(MatrixOrder.ColMajor);
+
+		// Everything grows
+		//ComplexTest.progressiveDgemmTimeTest(blasList, 3, 4, 5, 1, 2, 2, 2, 2, 1000, 1000);
+
+		// Matrix size grows
+		//ComplexTest.progressiveDgemmTimeTest(blasList, 2, 2, 2, 1, 2, 2, 2, 1, 2048, 2);
+
+		// Repeat count grows
+		//ComplexTest.progressiveDgemmTimeTest(blasList, 100, 100, 100, 1, 1, 1, 1, 2, 200, 2048);
 		
-		covarianceTest(priceMatrix.rows(), priceMatrix.columns(), priceMatrix, 1);
-	}
-
-	
-
-	private static void covarianceRandomTest(int m, int k, int times) {
-
-		// init random matrix
-		RealMatrix A = RealMatrix.createRandomDouble01(m, k,
-				MatrixOrder.ColMajor);
-
-		covarianceTest(m, k, A, times);
-	}
-
-	private static RealMatrix covarianceTest(int k, int n, RealMatrix A, int times) {
-		RealMatrix retval = null;
 		
-		for (BLAS b : blasList) {
 
-			RealMatrix result = new RealMatrix(n, n, MatrixOrder.ColMajor);
+		//ComplexTest.progressivePreparedCovTimeTest(blasList, 1, 2, 2048);
 
-			try {
-				b.covMtxPrimitive(MatrixOrder.ColMajor, k, n, A.data, k, k,
-						result.data, n, times);
-			} finally {
-				System.out.println("\n\n========== cov Random (x" + times
-						+ ") ==========\n");
-				//System.out.println("A:\n" + A + "\n");
-				System.out.println("result:\n" + result + "\n");
-			}
-			retval = result;
-		}
+		//ComplexTest.progressivePreparedCovPrimitiveTimeTest(blasList, 1, 2, 2048);
 		
-		return retval;
-	}
-
-	private static ArrayList<Result> daxpyRandomTest(int m, int times) {
-		ArrayList<Result> results = new ArrayList<Result>();
-
-		// init daxpy
-		RealMatrix x1 = RealMatrix.createRandomDouble01(m, 1,
-				MatrixOrder.ColMajor);
-		RealMatrix y1 = RealMatrix.createRandomDouble01(m, 1,
-				MatrixOrder.ColMajor);
-
-		for (BLAS b : blasList) {
-
-			RealMatrix y1LocalCopy = y1.copy();
-
-			try {
-				b.daxpy(x1.rows(), 2, x1.data, 1, y1LocalCopy.data, 1, times);
-			} finally {
-				System.out.println("\n\n========== DAXPY (x" + times
-						+ ") ==========\n");
-				System.out.println("x1:\n" + x1 + "\n");
-				System.out.println("y1 (original):\n" + y1 + "\n");
-				System.out.println("y1:\n" + y1LocalCopy + "\n");
-			}
-		}
-
-		return results;
+		//ComplexTest.progressiveRandomCovTimeTest(blasList, 2, 1, 1, 2, 2, 1, 2048, 2);
+		
+		//ComplexTest.progressiveRandomCovPrimitiveTimeTest(blasList, 2, 1, 1, 2, 2, 1, 2048, 2);
+		
 	}
 
 	static {
-		System.load("C:\\Users\\Mitya\\Documents\\Egyetem\\MII\\OnlabII\\BLASBenchmark\\BlasCpp\\Debug\\BlasCpp.dll");
+		System.load("C:\\Users\\Mitya\\Documents\\Egyetem\\MII\\OnlabII\\BLASBenchmark\\BLASJava\\nag_jni.dll");
+		System.load("C:\\Users\\Mitya\\Documents\\Egyetem\\MII\\OnlabII\\BLASBenchmark\\BlasCpp\\x64\\Debug\\BlasCpp.dll");
 	}
 
 }

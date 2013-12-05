@@ -414,21 +414,47 @@ namespace Swig {
 #include "BLASIntelMKL.h"
 
 
-static double *new_doubleArray(int nelements) { 
-  return new double[nelements]; 
+typedef double swigDoubleArray;
+
+SWIGINTERN swigDoubleArray *new_swigDoubleArray(int nelements){
+  return new double[nelements];
+}
+SWIGINTERN void delete_swigDoubleArray(swigDoubleArray *self){
+  delete [] self;
+}
+SWIGINTERN double swigDoubleArray_getitem(swigDoubleArray *self,int index){
+  return self[index];
+}
+SWIGINTERN void swigDoubleArray_setitem(swigDoubleArray *self,int index,double value){
+  self[index] = value;
+}
+SWIGINTERN double *swigDoubleArray_cast(swigDoubleArray *self){
+  return self;
+}
+SWIGINTERN swigDoubleArray *swigDoubleArray_frompointer(double *t){
+  return (swigDoubleArray *) t;
 }
 
-static void delete_doubleArray(double *ary) { 
-  delete [] ary; 
-}
+typedef int swigIntArray;
 
-static double doubleArray_getitem(double *ary, int index) {
-    return ary[index];
+SWIGINTERN swigIntArray *new_swigIntArray(int nelements){
+  return new int[nelements];
 }
-static void doubleArray_setitem(double *ary, int index, double value) {
-    ary[index] = value;
+SWIGINTERN void delete_swigIntArray(swigIntArray *self){
+  delete [] self;
 }
-
+SWIGINTERN int swigIntArray_getitem(swigIntArray *self,int index){
+  return self[index];
+}
+SWIGINTERN void swigIntArray_setitem(swigIntArray *self,int index,int value){
+  self[index] = value;
+}
+SWIGINTERN int *swigIntArray_cast(swigIntArray *self){
+  return self;
+}
+SWIGINTERN swigIntArray *swigIntArray_frompointer(int *t){
+  return (swigIntArray *) t;
+}
 
 
 /* ---------------------------------------------------
@@ -442,57 +468,173 @@ static void doubleArray_setitem(double *ary, int index, double value) {
 extern "C" {
 #endif
 
-SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_new_1doubleArray(JNIEnv *jenv, jclass jcls, jint jarg1) {
+SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_new_1swigDoubleArray(JNIEnv *jenv, jclass jcls, jint jarg1) {
   jlong jresult = 0 ;
   int arg1 ;
-  double *result = 0 ;
+  swigDoubleArray *result = 0 ;
   
   (void)jenv;
   (void)jcls;
   arg1 = (int)jarg1; 
-  result = (double *)new_doubleArray(arg1);
-  *(double **)&jresult = result; 
+  result = (swigDoubleArray *)new_swigDoubleArray(arg1);
+  *(swigDoubleArray **)&jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_delete_1doubleArray(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  double *arg1 = (double *) 0 ;
+SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_delete_1swigDoubleArray(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  swigDoubleArray *arg1 = (swigDoubleArray *) 0 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = *(double **)&jarg1; 
-  delete_doubleArray(arg1);
+  arg1 = *(swigDoubleArray **)&jarg1; 
+  delete_swigDoubleArray(arg1);
 }
 
 
-SWIGEXPORT jdouble JNICALL Java_nativeInterface_BLASCppModuleJNI_doubleArray_1getitem(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2) {
+SWIGEXPORT jdouble JNICALL Java_nativeInterface_BLASCppModuleJNI_swigDoubleArray_1getitem(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jdouble jresult = 0 ;
-  double *arg1 = (double *) 0 ;
+  swigDoubleArray *arg1 = (swigDoubleArray *) 0 ;
   int arg2 ;
   double result;
   
   (void)jenv;
   (void)jcls;
-  arg1 = *(double **)&jarg1; 
+  (void)jarg1_;
+  arg1 = *(swigDoubleArray **)&jarg1; 
   arg2 = (int)jarg2; 
-  result = (double)doubleArray_getitem(arg1,arg2);
+  result = (double)swigDoubleArray_getitem(arg1,arg2);
   jresult = (jdouble)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_doubleArray_1setitem(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2, jdouble jarg3) {
-  double *arg1 = (double *) 0 ;
+SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_swigDoubleArray_1setitem(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jdouble jarg3) {
+  swigDoubleArray *arg1 = (swigDoubleArray *) 0 ;
   int arg2 ;
   double arg3 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = *(double **)&jarg1; 
+  (void)jarg1_;
+  arg1 = *(swigDoubleArray **)&jarg1; 
   arg2 = (int)jarg2; 
   arg3 = (double)jarg3; 
-  doubleArray_setitem(arg1,arg2,arg3);
+  swigDoubleArray_setitem(arg1,arg2,arg3);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_swigDoubleArray_1cast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  swigDoubleArray *arg1 = (swigDoubleArray *) 0 ;
+  double *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(swigDoubleArray **)&jarg1; 
+  result = (double *)swigDoubleArray_cast(arg1);
+  *(double **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_swigDoubleArray_1frompointer(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  jlong jresult = 0 ;
+  double *arg1 = (double *) 0 ;
+  swigDoubleArray *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(double **)&jarg1; 
+  result = (swigDoubleArray *)swigDoubleArray_frompointer(arg1);
+  *(swigDoubleArray **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_new_1swigIntArray(JNIEnv *jenv, jclass jcls, jint jarg1) {
+  jlong jresult = 0 ;
+  int arg1 ;
+  swigIntArray *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = (int)jarg1; 
+  result = (swigIntArray *)new_swigIntArray(arg1);
+  *(swigIntArray **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_delete_1swigIntArray(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  swigIntArray *arg1 = (swigIntArray *) 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(swigIntArray **)&jarg1; 
+  delete_swigIntArray(arg1);
+}
+
+
+SWIGEXPORT jint JNICALL Java_nativeInterface_BLASCppModuleJNI_swigIntArray_1getitem(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+  jint jresult = 0 ;
+  swigIntArray *arg1 = (swigIntArray *) 0 ;
+  int arg2 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(swigIntArray **)&jarg1; 
+  arg2 = (int)jarg2; 
+  result = (int)swigIntArray_getitem(arg1,arg2);
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_swigIntArray_1setitem(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
+  swigIntArray *arg1 = (swigIntArray *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(swigIntArray **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  swigIntArray_setitem(arg1,arg2,arg3);
+}
+
+
+SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_swigIntArray_1cast(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  jlong jresult = 0 ;
+  swigIntArray *arg1 = (swigIntArray *) 0 ;
+  int *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(swigIntArray **)&jarg1; 
+  result = (int *)swigIntArray_cast(arg1);
+  *(int **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_swigIntArray_1frompointer(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  jlong jresult = 0 ;
+  int *arg1 = (int *) 0 ;
+  swigIntArray *result = 0 ;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(int **)&jarg1; 
+  result = (swigIntArray *)swigIntArray_frompointer(arg1);
+  *(swigIntArray **)&jresult = result; 
+  return jresult;
 }
 
 
@@ -603,6 +745,50 @@ SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_BLASNagC_1dgemm(JN
 }
 
 
+SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_BLASNagC_1nagcorrcov(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3, jlong jarg4, jint jarg5, jlong jarg6, jlong jarg7, jlong jarg8, jlong jarg9, jlong jarg10, jlong jarg11, jint jarg12, jlong jarg13, jint jarg14) {
+  BLAS::BLASNagC *arg1 = (BLAS::BLASNagC *) 0 ;
+  int arg2 ;
+  int arg3 ;
+  double *arg4 ;
+  int arg5 ;
+  int *arg6 ;
+  double *arg7 ;
+  double *arg8 = (double *) 0 ;
+  double *arg9 ;
+  double *arg10 ;
+  double *arg11 ;
+  int arg12 ;
+  double *arg13 ;
+  int arg14 ;
+  
+  (void)jenv;
+  (void)jcls;
+  (void)jarg1_;
+  arg1 = *(BLAS::BLASNagC **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = (int)jarg3; 
+  arg4 = *(double **)&jarg4; 
+  arg5 = (int)jarg5; 
+  arg6 = *(int **)&jarg6; 
+  arg7 = *(double **)&jarg7; 
+  arg8 = *(double **)&jarg8; 
+  arg9 = *(double **)&jarg9; 
+  arg10 = *(double **)&jarg10; 
+  arg11 = *(double **)&jarg11; 
+  arg12 = (int)jarg12; 
+  arg13 = *(double **)&jarg13; 
+  arg14 = (int)jarg14; 
+  (arg1)->nagcorrcov(arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11,arg12,arg13,arg14);
+  
+  
+  
+  
+  
+  
+  
+}
+
+
 SWIGEXPORT jlong JNICALL Java_nativeInterface_BLASCppModuleJNI_new_1BLASNagC(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   BLAS::BLASNagC *result = 0 ;
@@ -645,33 +831,6 @@ SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_BLASIntelMKL_1daxp
   arg6 = *(double **)&jarg6; 
   arg7 = (int)jarg7; 
   (arg1)->daxpy(arg2,arg3,arg4,arg5,arg6,arg7);
-  
-  
-}
-
-
-SWIGEXPORT void JNICALL Java_nativeInterface_BLASCppModuleJNI_BLASIntelMKL_1daxpby(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jdouble jarg3, jlong jarg4, jint jarg5, jdouble jarg6, jlong jarg7, jint jarg8) {
-  BLAS::BLASIntelMKL *arg1 = (BLAS::BLASIntelMKL *) 0 ;
-  int arg2 ;
-  double arg3 ;
-  double *arg4 ;
-  int arg5 ;
-  double arg6 ;
-  double *arg7 ;
-  int arg8 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(BLAS::BLASIntelMKL **)&jarg1; 
-  arg2 = (int)jarg2; 
-  arg3 = (double)jarg3; 
-  arg4 = *(double **)&jarg4; 
-  arg5 = (int)jarg5; 
-  arg6 = (double)jarg6; 
-  arg7 = *(double **)&jarg7; 
-  arg8 = (int)jarg8; 
-  (arg1)->daxpby(arg2,arg3,arg4,arg5,arg6,arg7,arg8);
   
   
 }

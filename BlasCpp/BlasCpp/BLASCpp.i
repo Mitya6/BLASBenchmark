@@ -6,7 +6,8 @@
 %}
 
 %include "carrays.i"
-%array_functions(double, doubleArray);
+%array_class(double, swigDoubleArray);
+%array_class(int, swigIntArray);
 
 %include "BLASNagC.h"
 %include "BLASIntelMKL.h"

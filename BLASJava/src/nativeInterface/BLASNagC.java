@@ -39,12 +39,16 @@ public class BLASNagC {
     BLASCppModuleJNI.BLASNagC_daxpby(swigCPtr, this, n, alpha, SWIGTYPE_p_double.getCPtr(x), incx, beta, SWIGTYPE_p_double.getCPtr(y), incy);
   }
 
-  public void dgemv(int order, int transA, int m, int n, double alpha, SWIGTYPE_p_double A, int lda, SWIGTYPE_p_double x, int incx, double beta, SWIGTYPE_p_double y, int incy) {
-    BLASCppModuleJNI.BLASNagC_dgemv(swigCPtr, this, order, transA, m, n, alpha, SWIGTYPE_p_double.getCPtr(A), lda, SWIGTYPE_p_double.getCPtr(x), incx, beta, SWIGTYPE_p_double.getCPtr(y), incy);
+  public void dgemv(int order, int transA, int m, int n, double alpha, SWIGTYPE_p_double A, int pda, SWIGTYPE_p_double x, int incx, double beta, SWIGTYPE_p_double y, int incy) {
+    BLASCppModuleJNI.BLASNagC_dgemv(swigCPtr, this, order, transA, m, n, alpha, SWIGTYPE_p_double.getCPtr(A), pda, SWIGTYPE_p_double.getCPtr(x), incx, beta, SWIGTYPE_p_double.getCPtr(y), incy);
   }
 
-  public void dgemm(int order, int transA, int transB, int m, int n, int k, double alpha, SWIGTYPE_p_double A, int lda, SWIGTYPE_p_double B, int ldb, double beta, SWIGTYPE_p_double C, int ldc) {
-    BLASCppModuleJNI.BLASNagC_dgemm(swigCPtr, this, order, transA, transB, m, n, k, alpha, SWIGTYPE_p_double.getCPtr(A), lda, SWIGTYPE_p_double.getCPtr(B), ldb, beta, SWIGTYPE_p_double.getCPtr(C), ldc);
+  public void dgemm(int order, int transA, int transB, int m, int n, int k, double alpha, SWIGTYPE_p_double A, int pda, SWIGTYPE_p_double B, int pdb, double beta, SWIGTYPE_p_double C, int pdc) {
+    BLASCppModuleJNI.BLASNagC_dgemm(swigCPtr, this, order, transA, transB, m, n, k, alpha, SWIGTYPE_p_double.getCPtr(A), pda, SWIGTYPE_p_double.getCPtr(B), pdb, beta, SWIGTYPE_p_double.getCPtr(C), pdc);
+  }
+
+  public void nagcorrcov(int n, int m, SWIGTYPE_p_double x, int tdx, SWIGTYPE_p_int sx, SWIGTYPE_p_double wt, SWIGTYPE_p_double sw, SWIGTYPE_p_double wmean, SWIGTYPE_p_double std, SWIGTYPE_p_double r, int tdr, SWIGTYPE_p_double v, int tdv) {
+    BLASCppModuleJNI.BLASNagC_nagcorrcov(swigCPtr, this, n, m, SWIGTYPE_p_double.getCPtr(x), tdx, SWIGTYPE_p_int.getCPtr(sx), SWIGTYPE_p_double.getCPtr(wt), SWIGTYPE_p_double.getCPtr(sw), SWIGTYPE_p_double.getCPtr(wmean), SWIGTYPE_p_double.getCPtr(std), SWIGTYPE_p_double.getCPtr(r), tdr, SWIGTYPE_p_double.getCPtr(v), tdv);
   }
 
   public BLASNagC() {

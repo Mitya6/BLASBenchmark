@@ -1,34 +1,47 @@
 package blas;
 
-import nativeInterface.BLASCppModule;
-import nativeInterface.SWIGTYPE_p_double;
+import nativeInterface.swigDoubleArray;
 
 public class RealArray {
 
 	private double[] data;
+	private final static double EPSILON = 0.0000001;
 
 	public RealArray(double[] array) {
 		this.data = array;
 	}
-
-	public RealArray(SWIGTYPE_p_double swigarray, int length) {
+	
+	public RealArray(swigDoubleArray swigarray, int length) {
 		this.data = new double[length];
 		for (int i = 0; i < length; i++) {
-			this.data[i] = BLASCppModule.doubleArray_getitem(swigarray, i);
+			this.data[i] = swigarray.getitem(i);
 		}
 	}
-
-	public double[] toDouble() {
-		return this.data;
-	}
-
-	public SWIGTYPE_p_double toSWIGTYPE_p_double() {
-		SWIGTYPE_p_double swigarray = BLASCppModule
-				.new_doubleArray(this.data.length);
+	
+	public void init(double value) {
 		for (int i = 0; i < this.data.length; i++) {
-			BLASCppModule.doubleArray_setitem(swigarray, i, this.data[i]);
+			this.data[i] = value;
+		}
+	}
+	
+	public swigDoubleArray toSwigDoubleArray() {
+		swigDoubleArray swigarray = new swigDoubleArray(this.data.length);
+		for (int i = 0; i < this.data.length; i++) {
+			swigarray.setitem(i, this.data[i]);
 		}
 		return swigarray;
+	}
+	
+	public boolean equals(RealArray other) {
+		if (this.data.length != other.getLength()) {
+			return false;
+		}
+		for (int i = 0; i < this.data.length; i++) {
+			if (Math.abs(this.data[i] - other.get(i)) > RealArray.EPSILON) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public int getLength() {

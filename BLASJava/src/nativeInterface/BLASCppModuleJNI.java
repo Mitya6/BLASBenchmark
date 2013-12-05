@@ -9,17 +9,25 @@
 package nativeInterface;
 
 public class BLASCppModuleJNI {
-  public final static native long new_doubleArray(int jarg1);
-  public final static native void delete_doubleArray(long jarg1);
-  public final static native double doubleArray_getitem(long jarg1, int jarg2);
-  public final static native void doubleArray_setitem(long jarg1, int jarg2, double jarg3);
+  public final static native long new_swigDoubleArray(int jarg1);
+  public final static native void delete_swigDoubleArray(long jarg1);
+  public final static native double swigDoubleArray_getitem(long jarg1, swigDoubleArray jarg1_, int jarg2);
+  public final static native void swigDoubleArray_setitem(long jarg1, swigDoubleArray jarg1_, int jarg2, double jarg3);
+  public final static native long swigDoubleArray_cast(long jarg1, swigDoubleArray jarg1_);
+  public final static native long swigDoubleArray_frompointer(long jarg1);
+  public final static native long new_swigIntArray(int jarg1);
+  public final static native void delete_swigIntArray(long jarg1);
+  public final static native int swigIntArray_getitem(long jarg1, swigIntArray jarg1_, int jarg2);
+  public final static native void swigIntArray_setitem(long jarg1, swigIntArray jarg1_, int jarg2, int jarg3);
+  public final static native long swigIntArray_cast(long jarg1, swigIntArray jarg1_);
+  public final static native long swigIntArray_frompointer(long jarg1);
   public final static native void BLASNagC_daxpby(long jarg1, BLASNagC jarg1_, int jarg2, double jarg3, long jarg4, int jarg5, double jarg6, long jarg7, int jarg8);
   public final static native void BLASNagC_dgemv(long jarg1, BLASNagC jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double jarg6, long jarg7, int jarg8, long jarg9, int jarg10, double jarg11, long jarg12, int jarg13);
   public final static native void BLASNagC_dgemm(long jarg1, BLASNagC jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, double jarg8, long jarg9, int jarg10, long jarg11, int jarg12, double jarg13, long jarg14, int jarg15);
+  public final static native void BLASNagC_nagcorrcov(long jarg1, BLASNagC jarg1_, int jarg2, int jarg3, long jarg4, int jarg5, long jarg6, long jarg7, long jarg8, long jarg9, long jarg10, long jarg11, int jarg12, long jarg13, int jarg14);
   public final static native long new_BLASNagC();
   public final static native void delete_BLASNagC(long jarg1);
   public final static native void BLASIntelMKL_daxpy(long jarg1, BLASIntelMKL jarg1_, int jarg2, double jarg3, long jarg4, int jarg5, long jarg6, int jarg7);
-  public final static native void BLASIntelMKL_daxpby(long jarg1, BLASIntelMKL jarg1_, int jarg2, double jarg3, long jarg4, int jarg5, double jarg6, long jarg7, int jarg8);
   public final static native void BLASIntelMKL_dgemv(long jarg1, BLASIntelMKL jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, double jarg6, long jarg7, int jarg8, long jarg9, int jarg10, double jarg11, long jarg12, int jarg13);
   public final static native void BLASIntelMKL_dgemm(long jarg1, BLASIntelMKL jarg1_, int jarg2, int jarg3, int jarg4, int jarg5, int jarg6, int jarg7, double jarg8, long jarg9, int jarg10, long jarg11, int jarg12, double jarg13, long jarg14, int jarg15);
   public final static native long new_BLASIntelMKL();

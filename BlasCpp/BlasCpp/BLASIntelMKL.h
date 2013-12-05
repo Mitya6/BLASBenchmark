@@ -5,7 +5,7 @@
 
 namespace BLAS
 {
-	class BLASIntelMKL //: public BLASCpp
+	class BLASIntelMKL
 	{
 	public:
 
@@ -14,10 +14,6 @@ namespace BLAS
 		// daxpy: y <- alpha*x + y (intelMKL only)
 		void daxpy(int n, double alpha, double x[], int incx,
 			double y[], int incy);
-
-		// daxpby: y <- alpha*x + beta*y (NagC + intelMKL)
-		void daxpby(int n, double alpha, double x[], int incx,
-			double beta, double y[], int incy);
 
 		// dgemv: y <- alpha*op(A)*x + beta*y (NagC + intelMKL)
 		void dgemv(int order, int transA, int m, int n, double alpha,

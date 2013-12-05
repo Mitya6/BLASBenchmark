@@ -1,156 +1,67 @@
 package blas;
 
-import java.util.Arrays;
-
 import org.jblas.NativeBlas;
 
 public class JBlasBLAS extends BLAS {
-
-	@Override
-	public void daxpy(int n, double alpha, RealArray x, int incx, RealArray y,
-			int incy, int times) {
-
-		double[] yAsDouble = y.toDouble();
-		callDaxpyMultiple(n, alpha, x.toDouble(), incx, yAsDouble, incy, times);
-		y = new RealArray(yAsDouble);
-	}
-
-	// Method to be measured
-	private void callDaxpyMultiple(int n, double alpha, double[] x, int incx,
-			double[] y, int incy, int times) {
-
-		for (int i = 0; i < times; i++) {
-			NativeBlas.daxpy(n, alpha, x, 0, incx, y, 0, incy);
-		}
+	
+	public JBlasBLAS() {
+		super(BlasType.JBLAS);
 	}
 
 	@Override
-	public void dgemv(MatrixOrder order, char transA, int m, int n,
-			double alpha, RealArray A, int lda, RealArray x, int incx,
-			double beta, RealArray y, int incy, int times) {
+	public long daxpy(double alpha, RealMatrix x, RealMatrix y, int times) {
 
-		double[] yAsDouble = y.toDouble();
-		callDgemvMultiple(transA, m, n, alpha, A.toDouble(), lda, x.toDouble(),
-				incx, beta, yAsDouble, incy, times);
-		y = new RealArray(yAsDouble);
-	}
-
-	// Method to be measured
-	private void callDgemvMultiple(char transA, int m, int n, double alpha,
-			double[] A, int lda, double[] x, int incx, double beta, double[] y,
-			int incy, int times) {
-
-		for (int i = 0; i < times; i++) {
-			NativeBlas.dgemv(transA, m, n, alpha, A, 0, lda, x, 0, 1, beta, y,
-					0, 1);
-		}
+		int n = x.rows();
+		
+		long startTime = System.nanoTime();
+		
+		NativeBlas.daxpy(n, alpha, x.getData().getData(), 0, 1, y.getData()
+				.getData(), 0, 1);
+		
+		long elapsedTime = System.nanoTime() - startTime;
+		return elapsedTime;
 	}
 
 	@Override
-	public void dgemm(MatrixOrder order, char transA, char transB, int m,
-			int n, int k, double alpha, RealArray A, int lda, RealArray B,
-			int ldb, double beta, RealArray C, int ldc, int times) {
+	public long dgemv(Transpose transA, double alpha, RealMatrix A,
+			RealMatrix x, double beta, RealMatrix y, int times) {
 
-		double[] CAsDouble = C.toDouble();
-		callDgemmMultiple(transA, transB, m, n, k, alpha, A.toDouble(), lda,
-				B.toDouble(), ldb, beta, CAsDouble, ldc, times);
-		C = new RealArray(CAsDouble);
-	}
+		char tA = transA == Transpose.NOTRANSPOSE ? 'N' : 'T';
+		int m = A.rows();
+		int n = A.columns();
+		int lda = m;
 
-	// Method to be measured
-	private void callDgemmMultiple(char transA, char transB, int m, int n,
-			int k, double alpha, double[] A, int lda, double[] B, int ldb,
-			double beta, double[] C, int ldc, int times) {
-
-		for (int i = 0; i < times; i++) {
-			NativeBlas.dgemm(transA, transB, m, n, k, alpha, A, 0, lda, B, 0,
-					ldb, beta, C, 0, ldc);
-		}
+		long startTime = System.nanoTime();
+		
+		NativeBlas.dgemv(tA, m, n, alpha, A.getData().getData(), 0, lda, x
+				.getData().getData(), 0, 1, beta, y.getData().getData(), 0, 1);
+		
+		long elapsedTime = System.nanoTime() - startTime;
+		return elapsedTime;
 	}
 
 	@Override
-	public void covMtx(MatrixOrder order, int m, int n, RealArray A, int lda,
-			int ldb, RealArray result, int ldc, int times) {
-		covMtxPrimitive(order, m, n, A, lda, ldb, result, ldc, times);
-	}
+	public long dgemm(Transpose transA, Transpose transB, double alpha,
+			RealMatrix A, RealMatrix B, double beta, RealMatrix C, int times) {
 
-	@Override
-	public void covMtxPrimitive(MatrixOrder order, int m, int n, RealArray A,
-			int lda, int ldb, RealArray result, int ldc, int times) {
+		char tA = transA == Transpose.NOTRANSPOSE ? 'N' : 'T';
+		char tB = transB == Transpose.NOTRANSPOSE ? 'N' : 'T';
+		int m = transA == Transpose.NOTRANSPOSE ? A.rows() : A.columns();
+		int n = transB == Transpose.NOTRANSPOSE ? B.columns() : B.rows();
+		int k = transA == Transpose.NOTRANSPOSE ? A.columns() : A.rows();
+		int lda = transA == Transpose.NOTRANSPOSE ? m : k;
+		int ldb = transB == Transpose.NOTRANSPOSE ? k : n;
+		int ldc = m;
+		
+		long startTime = System.nanoTime();
 
-		double[] resultAsDouble = result.toDouble();
-		callCovMtxPrimitiveMultiple(m, n, A.toDouble(), lda, ldb,
-				resultAsDouble, ldc, times);
-		result = new RealArray(resultAsDouble);
-
-		// create and pass nxn identityMatrix
-	}
-
-	// Method to be measured
-	// In JBlas use colmajor order
-	private void callCovMtxPrimitiveMultiple(int m, int n, double[] A, int lda,
-			int ldb, /* double[] identityMtx, */double[] result, int ldc,
-			int times) {
-
-		// 1) weights for each row
-		double[] weights = new double[m];
-		double weightSum = 0.0;
-		for (int i = 0; i < m; i++) {
-			double weight = Math.pow(2, (i - m) / 30.0);
-			weights[i] = weight;
-			weightSum += weight;
-		}
-
-		// 2) rescaled weights
-		for (int i = 0; i < m; i++) {
-			weights[i] *= m / weightSum;
-		}
-
-		// 3) weighted average for each column
-		double[] weightedAvgs = new double[n];
-		for (int j = 0; j < n; j++) {
-			double weightedAvg = 0.0;
-			for (int i = 0; i < m; i++) {
-				weightedAvg += weights[i] * A[j * m + i];
-			}
-			weightedAvgs[j] = weightedAvg / m;
-		}
-
-		// 4) centered data => m(i,j) - weightedAvg(j)
-		// dgemm: C <- alpha*op(A)*op(B) + beta*C
-		// 1*A*I + 1*weightMtx
-
-		double[] centeredData = new double[m * n];
-		for (int j = 0; j < n; j++) {
-			for (int i = 0; i < m; i++) {
-				centeredData[j * m + i] = A[j * m + i] - weightedAvgs[j];
-			}
-		}
-
-		/*
-		 * double[] weightMtx = new double[m * n]; for (int j = 0; j < n; j++) {
-		 * for (int i = 0; i < m; i++) { weightMtx[j * m + i] =
-		 * -weightedAvgs[j]; } } callDgemmMultiple('N', 'N', m, n, n, 1, A, m,
-		 * identityMtx, n, 1, weightMtx, m, 1);
-		 * 
-		 * double[] centeredData = weightMtx;
-		 */
-
-		// 5) weighted centered data => centered data(i,j)*weights(i)
-		double[] weightedCenteredData = new double[m * n];
-		for (int j = 0; j < n; j++) {
-			for (int i = 0; i < m; i++) {
-				weightedCenteredData[j * m + i] = centeredData[j * m + i]
-						* weights[i];
-			}
-		}
-
-		// 6) calculate cov mtx
-		// double[] result = new double[n * n];
-
-		callDgemmMultiple('T', 'N', n, n, m, 1.0 / (m - 1), centeredData, lda,
-				weightedCenteredData, ldb, 0.0, result, ldc, 1);
-	}
+		NativeBlas.dgemm(tA, tB, m, n, k, alpha, A.getData().getData(), 0, lda,
+				B.getData().getData(), 0, ldb, beta, C.getData().getData(), 0,
+				ldc);
+		
+		long elapsedTime = System.nanoTime() - startTime;
+		return elapsedTime;
+	}	
 
 	@Override
 	public String toString() {

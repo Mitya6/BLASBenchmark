@@ -39,10 +39,6 @@ public class BLASIntelMKL {
     BLASCppModuleJNI.BLASIntelMKL_daxpy(swigCPtr, this, n, alpha, SWIGTYPE_p_double.getCPtr(x), incx, SWIGTYPE_p_double.getCPtr(y), incy);
   }
 
-  public void daxpby(int n, double alpha, SWIGTYPE_p_double x, int incx, double beta, SWIGTYPE_p_double y, int incy) {
-    BLASCppModuleJNI.BLASIntelMKL_daxpby(swigCPtr, this, n, alpha, SWIGTYPE_p_double.getCPtr(x), incx, beta, SWIGTYPE_p_double.getCPtr(y), incy);
-  }
-
   public void dgemv(int order, int transA, int m, int n, double alpha, SWIGTYPE_p_double A, int lda, SWIGTYPE_p_double x, int incx, double beta, SWIGTYPE_p_double y, int incy) {
     BLASCppModuleJNI.BLASIntelMKL_dgemv(swigCPtr, this, order, transA, m, n, alpha, SWIGTYPE_p_double.getCPtr(A), lda, SWIGTYPE_p_double.getCPtr(x), incx, beta, SWIGTYPE_p_double.getCPtr(y), incy);
   }
