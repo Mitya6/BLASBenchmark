@@ -25,12 +25,15 @@ public class TestResult {
 
 	@Override
 	public String toString() {
-		String s = "\n";
+		
+		String newline = System.getProperty("line.separator");
+		
+		String s = newline;
 		s += "m = " + m;
 		s += ", n = " + n;
 		s += ", k = " + k;
 		s += ", x" + repeatCount;
-		s += "\ntime = " + getSeconds() + " s (" + nanoseconds + " ns)\n";
+		s += newline + "time = " + getSeconds() + " s (" + nanoseconds + " ns)" + newline;
 		return s;
 	}
 

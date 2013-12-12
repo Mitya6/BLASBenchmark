@@ -39,17 +39,15 @@ public abstract class BLAS {
 		long startTime = System.nanoTime();
 
 		double[] Adata = A.getData().getData();
-		double[] weights = weightVector.getData().getData();
 
 		// 3) weighted average for each column
-		double[] weightedAvgs = new double[A.columns()];
-		for (int j = 0; j < A.columns(); j++) {
-			double weightedAvg = 0.0;
-			for (int i = 0; i < A.rows(); i++) {
-				weightedAvg += weights[i] * Adata[j * A.rows() + i];
-			}
-			weightedAvgs[j] = weightedAvg / A.rows();
-		}
+		RealMatrix weightAvgVector = new RealMatrix(1, A.columns(),
+						new double[A.columns()], MatrixOrder.COLMAJOR);
+
+		dgemm(Transpose.TRANSPOSE, Transpose.NOTRANSPOSE, 1.0 / A.rows(),
+				weightVector, A, 1.0, weightAvgVector, 1);
+		
+		double[] weightedAvgs = weightAvgVector.getData().getData();
 
 		// 4) centered data => m(i,j) - weightedAvg(j)
 		// dgemm: C <- alpha*op(A)*op(B) + beta*C
@@ -62,16 +60,8 @@ public abstract class BLAS {
 			}
 		}
 
-		/*
-		 * double[] weightMtx = new double[m * n]; for (int j = 0; j < n; j++) {
-		 * for (int i = 0; i < m; i++) { weightMtx[j * m + i] =
-		 * -weightedAvgs[j]; } } callDgemmMultiple('N', 'N', m, n, n, 1, A, m,
-		 * identityMtx, n, 1, weightMtx, m, 1);
-		 * 
-		 * double[] centeredData = weightMtx;
-		 */
-
 		// 5) weighted centered data => centered data(i,j)*weights(i)
+		double[] weights = weightVector.getData().getData();
 		double[] weightedCenteredData = new double[A.rows() * A.columns()];
 		for (int j = 0; j < A.columns(); j++) {
 			for (int i = 0; i < A.rows(); i++) {
@@ -89,7 +79,7 @@ public abstract class BLAS {
 						MatrixOrder.COLMAJOR), 0.0, varCovarMtx, 1);
 
 		long elapsedTime = System.nanoTime() - startTime;
-		
+
 		return elapsedTime;
 
 	}

@@ -35,9 +35,10 @@ public class ComplexTest {
 
 	public static void progressiveDgemmTimeTest(ArrayList<BLAS> blasList,
 			int m, int n, int k, int repeatCount, int mGrowth, int nGrowth,
-			int kGrowth, int repeatGrowth, int maxsize, int maxcount) {
+			int kGrowth, int repeatGrowth, int maxsize, int maxcount,
+			boolean exponentialGrowth) {
 
-		if (mGrowth < 1 || nGrowth < 1 || kGrowth < 1 || repeatGrowth < 1) {
+		if (mGrowth < 0 || nGrowth < 0 || kGrowth < 0 || repeatGrowth < 0) {
 			return;
 		}
 
@@ -54,13 +55,21 @@ public class ComplexTest {
 			progressiveResults.addAll(TimeTest.dgemmTest(blasList, m, n, k,
 					repeatCount));
 
-			m *= mGrowth;
-			n *= nGrowth;
-			k *= kGrowth;
-			repeatCount *= repeatGrowth;
+			if (exponentialGrowth) {
+				m *= mGrowth;
+				n *= nGrowth;
+				k *= kGrowth;
+				repeatCount *= repeatGrowth;
+			} else {
+				m += mGrowth;
+				n += nGrowth;
+				k += kGrowth;
+				repeatCount += repeatGrowth;
+			}
+			
 		}
 
-		printResults(blasList, BlasMethod.DGEMM, progressiveResults);
+		printResultsToFile(blasList, BlasMethod.DGEMM, progressiveResults);
 	}
 
 	public static void progressiveRandomCovTimeTest(ArrayList<BLAS> blasList,
@@ -88,7 +97,7 @@ public class ComplexTest {
 			repeatCount *= repeatGrowth;
 		}
 
-		printResults(blasList, BlasMethod.COV, progressiveResults);
+		printResultsToFile(blasList, BlasMethod.COV, progressiveResults);
 	}
 
 	public static void progressiveRandomCovPrimitiveTimeTest(
@@ -116,7 +125,8 @@ public class ComplexTest {
 			repeatCount *= repeatGrowth;
 		}
 
-		printResults(blasList, BlasMethod.COVPRIMITIVE, progressiveResults);
+		printResultsToFile(blasList, BlasMethod.COVPRIMITIVE,
+				progressiveResults);
 	}
 
 	public static void progressivePreparedCovTimeTest(ArrayList<BLAS> blasList,
@@ -124,7 +134,7 @@ public class ComplexTest {
 		if (repeatGrowth < 1) {
 			return;
 		}
-		
+
 		RealMatrix A = CovarianceHelper.getAMatrix();
 
 		ArrayList<TestResult> progressiveResults = new ArrayList<TestResult>();
@@ -141,7 +151,7 @@ public class ComplexTest {
 			repeatCount *= repeatGrowth;
 		}
 
-		printResults(blasList, BlasMethod.COV, progressiveResults);
+		printResultsToFile(blasList, BlasMethod.COV, progressiveResults);
 	}
 
 	public static void progressivePreparedCovPrimitiveTimeTest(
@@ -150,7 +160,7 @@ public class ComplexTest {
 		if (repeatGrowth < 1) {
 			return;
 		}
-		
+
 		RealMatrix A = CovarianceHelper.getAMatrix();
 
 		ArrayList<TestResult> progressiveResults = new ArrayList<TestResult>();
@@ -167,21 +177,85 @@ public class ComplexTest {
 			repeatCount *= repeatGrowth;
 		}
 
-		printResults(blasList, BlasMethod.COVPRIMITIVE, progressiveResults);
+		printResultsToFile(blasList, BlasMethod.COVPRIMITIVE,
+				progressiveResults);
+	}
+	
+	public static void covarianceTimeTest(ArrayList<BLAS> blasList,
+			int repeatCount) {
+		
+		RealMatrix A = CovarianceHelper.getAMatrix();
+
+		ArrayList<TestResult> progressiveResults = new ArrayList<TestResult>();
+
+		System.out.println("Progressive test started.");
+		
+		for (int i = 2; i <= 32; i += 2) {
+			
+			RealMatrix Acopy = A.getFirstColumns(i);
+			
+			System.out.println("Calculating: cov size = " + i);
+
+			progressiveResults.addAll(TimeTest.covTest(blasList, Acopy, -1, -1,
+					repeatCount));
+		}
+
+		printResultsToFile(blasList, BlasMethod.COV, progressiveResults);
 	}
 
 	private static void printResults(ArrayList<BLAS> blasList,
 			BlasMethod method, ArrayList<TestResult> results) {
 
-		String s = "\n========== " + method.toString() + " ==========";
+		String newline = System.getProperty("line.separator");
+
+		String s = newline + "========== " + method.toString() + " ==========";
 
 		for (BLAS b : blasList) {
-			s += "\n\n" + b.toString();
+			s += newline + newline + b.toString();
 			for (TestResult result : results) {
 				if (result.getBlasType() == b.blasType) {
 					s += result.toString();
 				}
 			}
+		}
+
+		System.out.println(s);
+	}
+
+	private static void printResultsToFile(ArrayList<BLAS> blasList,
+			BlasMethod method, ArrayList<TestResult> results) {
+
+		System.setOut(Benchmark.outputFile("result.csv"));
+
+		String newline = System.getProperty("line.separator");
+
+		String s = "";
+
+		for (BLAS b : blasList) {
+			s += b.toString() + newline;
+			String sn = "n;";
+			String sm = "m;";
+			String sk = "k;";
+			String srepeat = "repeat;";
+			String sseconds = "seconds;";
+			String snanotime = "nanotime;";
+			for (TestResult result : results) {
+				if (result.getBlasType() == b.blasType) {
+					sn += result.getN() + ";";
+					sm += result.getM() + ";";
+					sk += result.getK() + ";";
+					srepeat += "x" + result.getRepeatCount() + ";";
+					sseconds += result.getSeconds() + ";";
+					snanotime += result.getNanoseconds() + ";";
+				}
+			}
+			s += sn + newline;
+			s += sm + newline;
+			s += sk + newline;
+			s += srepeat + newline;
+			s += sseconds + newline;
+			s += snanotime + newline;
+			s += newline;
 		}
 
 		System.out.println(s);

@@ -15,6 +15,8 @@ public class CorrectnessTest {
 	// 3   3   6
 	public static boolean daxpyTest(ArrayList<BLAS> blasList,
 			boolean writeOutput) {
+		
+		String newline = System.getProperty("line.separator");
 
 		int n = 3;
 		RealMatrix x = new RealMatrix(n, 1, new double[] { 1, 2, 3 },
@@ -31,10 +33,10 @@ public class CorrectnessTest {
 				b.daxpy(1.0, x, y, 1);
 			} finally {
 				if (writeOutput) {
-					System.out.println("\n\n========== DAXPY (x" + 1 + ") "
-							+ b.toString() + " ==========\n");
-					System.out.println("x:\n" + x + "\n");
-					System.out.println("y:\n" + y + "\n");
+					System.out.println(newline + newline + "========== DAXPY (x" + 1 + ") "
+							+ b.toString() + " ==========" + newline);
+					System.out.println("x:" + newline + x + newline);
+					System.out.println("y:" + newline + y + newline);
 				}
 				resultMatrices.add(y);
 			}
@@ -49,6 +51,8 @@ public class CorrectnessTest {
 	// 4,5,6   3   32
 	public static boolean dgemvTest(ArrayList<BLAS> blasList,
 			boolean writeOutput) {
+		
+		String newline = System.getProperty("line.separator");
 
 		int m = 2, n = 3;
 
@@ -75,12 +79,12 @@ public class CorrectnessTest {
 				b.dgemv(Transpose.TRANSPOSE, 1.0, TA, x, 0.0, yTA, 1);
 			} finally {
 				if (writeOutput) {
-					System.out.println("\n\n========== DGEMV (x" + 1 + ") "
-							+ b.toString() + " ==========\n");
-					System.out.println("A:\n" + A + "\n");
-					System.out.println("x:\n" + x + "\n");
-					System.out.println("y:\n" + y + "\n");
-					System.out.println("yTA:\n" + yTA + "\n");
+					System.out.println(newline + newline + "========== DGEMV (x" + 1 + ") "
+							+ b.toString() + " ==========" + newline);
+					System.out.println("A:" + newline + A + newline);
+					System.out.println("x:" + newline + x + newline);
+					System.out.println("y:" + newline + y + newline);
+					System.out.println("yTA:" + newline + yTA + newline);
 				}
 				resultMatrices.add(y);
 				resultMatrices.add(yTA);
@@ -97,6 +101,8 @@ public class CorrectnessTest {
 	public static boolean dgemmTest(ArrayList<BLAS> blasList,
 			boolean writeOutput) {
 
+		String newline = System.getProperty("line.separator");
+		
 		int m = 2, n = 4, k = 3;
 
 		// Matrix A
@@ -135,14 +141,14 @@ public class CorrectnessTest {
 						0.0, CTATB, 1);
 			} finally {
 				if (writeOutput) {
-					System.out.println("\n\n========== DGEMM (x" + 1 + ") "
-							+ b.toString() + " ==========\n");
-					System.out.println("A:\n" + A + "\n");
-					System.out.println("B:\n" + B + "\n");
-					System.out.println("C:\n" + C + "\n");
-					System.out.println("CTA:\n" + CTA + "\n");
-					System.out.println("CTB:\n" + CTB + "\n");
-					System.out.println("CTATB:\n" + CTATB + "\n");
+					System.out.println(newline + newline + "========== DGEMM (x" + 1 + ") "
+							+ b.toString() + " ==========" + newline);
+					System.out.println("A:" + newline + A + newline);
+					System.out.println("B:" + newline + B + newline);
+					System.out.println("C:" + newline + C + newline);
+					System.out.println("CTA:" + newline + CTA + newline);
+					System.out.println("CTB:" + newline + CTB + newline);
+					System.out.println("CTATB:" + newline + CTATB + newline);
 				}
 				resultMatrices.add(C);
 				resultMatrices.add(CTA);
@@ -157,6 +163,8 @@ public class CorrectnessTest {
 	public static boolean covTest(ArrayList<BLAS> blasList, RealMatrix A,
 			RealMatrix weightVector, RealMatrix referenceMtx,
 			boolean writeOutput) {
+		
+		String newline = System.getProperty("line.separator");
 
 		ArrayList<RealMatrix> resultMatrices = new ArrayList<RealMatrix>();
 
@@ -167,9 +175,9 @@ public class CorrectnessTest {
 				b.covMtx(A, weightVector, resMtx, 1);
 			} finally {
 				if (writeOutput) {
-					System.out.println("\n\n========== COVTEST (x" + 1 + ") "
-							+ b.toString() + " ==========\n");
-					System.out.println("Covariance matrix:\n" + resMtx + "\n");
+					System.out.println(newline + newline + "========== COVTEST (x" + 1 + ") "
+							+ b.toString() + " ==========" + newline);
+					System.out.println("Covariance matrix:" + newline + resMtx + newline);
 				}
 				resultMatrices.add(resMtx);
 			}
@@ -182,6 +190,8 @@ public class CorrectnessTest {
 	public static boolean covPrimitiveTest(
 			ArrayList<BLAS> blasList, RealMatrix A, RealMatrix weightVector,
 			RealMatrix referenceMtx, boolean writeOutput) {
+		
+		String newline = System.getProperty("line.separator");
 
 		ArrayList<RealMatrix> resultMatrices = new ArrayList<RealMatrix>();
 
@@ -193,9 +203,9 @@ public class CorrectnessTest {
 				b.covMtxPrimitive(ACopy, weightVector, resMtx, 1);
 			} finally {
 				if (writeOutput) {
-					System.out.println("\n\n========== PRIMITIVE COVTEST (x" + 1 + ") "
-							+ b.toString() + " ==========\n");
-					System.out.println("Covariance matrix:\n" + resMtx + "\n");
+					System.out.println(newline + newline + "========== PRIMITIVE COVTEST (x" + 1 + ") "
+							+ b.toString() + " ==========" + newline);
+					System.out.println("Covariance matrix:" + newline + resMtx + newline);
 				}
 				resultMatrices.add(resMtx);
 			}

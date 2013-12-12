@@ -107,6 +107,9 @@ public class RealMatrix {
 
 	@Override
 	public String toString() {
+		
+		String newline = System.getProperty("line.separator");
+		
 		String s = "[";
 		DecimalFormat df = new DecimalFormat("#.######");
 
@@ -118,7 +121,7 @@ public class RealMatrix {
 				}
 			}
 			if (i < this.m - 1) {
-				s += "\n";
+				s += newline;
 			}
 		}
 		return s + "]";
@@ -199,5 +202,18 @@ public class RealMatrix {
 
 	public RealArray getData() {
 		return this.data;
+	}
+
+	public RealMatrix getFirstColumns(int number) {
+		if (this.order == MatrixOrder.ROWMAJOR) {
+			setOrder(MatrixOrder.COLMAJOR);
+		}
+		
+		double[] newdata = new double[this.m * number];
+		for (int i = 0; i < this.m * number; i++) {
+			newdata[i] = this.getData().get(i);
+		}
+		
+		return new RealMatrix(m, number, newdata, MatrixOrder.COLMAJOR);
 	}
 }
